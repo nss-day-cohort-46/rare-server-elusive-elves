@@ -67,8 +67,69 @@ class HandleRequests(BaseHTTPRequestHandler):
             (resource, key, value) = parsed
 
 
-    
+    def do_DELETE(self):
+        self._set_headers(204)
+        (resource, id) = self.parse_url(self.path)
 
+
+    
+    def do_PUT(self):
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+
+        (resource, id) = self.parse_url(self.path)
+
+        success = False
+
+        if resource == 'users':
+            if id is not None:
+                response = f"{get_single_user(id)}"
+            else:
+                response = f"{get_all_users()}"
+        
+        if resource == 'posts':
+            if id is not None:
+                response = f"{get_single_post(id)}"
+            else:
+                response = f"{get_all_posts()}"
+        
+        if resource == 'comments':
+            if id is not None:
+                response = f"{get_single_comment(id)}"
+            else:
+                response = f"{get_all_comments()}"
+        
+        if resource == 'tags':
+            if id is not None:
+                response = f"{get_single_tag(id)}"
+            else:
+                response = f"{get_all_tags()}"
+        
+        if resource == 'categories':
+            if id is not None:
+                response = f"{get_single_category(id)}"
+            else:
+                response = f"{get_all_categories()}"
+        
+        if resource == 'reactions':
+            if id is not None:
+                response = f"{get_single_reaction(id)}"
+            else:
+                response = f"{get_all_reactions()}"
+        
+        if resource == 'subscriptions':
+            if id is not None:
+                response = f"{get_single_subscription(id)}"
+            else:
+                response = f"{get_all_subscriptions()}"
+
+        
+        
+
+
+
+    def do_POST(self):
 
 
 
