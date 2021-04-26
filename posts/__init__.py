@@ -1,0 +1,1 @@
+from .request import get_single_post
