@@ -9,7 +9,6 @@ class HandleRequests(BaseHTTPRequestHandler):
         resource = path_params[1]
 
         if "?" in resource:
-
             resource = resource.split("?")[0]
             param = resource.split("?")[1]
 
@@ -21,10 +20,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             return (resource, key, value)
 
         else:
-
             id = None
             try:
-
                 id = int(path_params[2])
             except IndexError:
                 pass
@@ -36,7 +33,6 @@ class HandleRequests(BaseHTTPRequestHandler):
     
     
     def _set_headers(self, status):
-
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -45,7 +41,6 @@ class HandleRequests(BaseHTTPRequestHandler):
     
     
     def do_OPTIONS(self):
-
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
@@ -57,61 +52,63 @@ class HandleRequests(BaseHTTPRequestHandler):
     def do_GET(self):
         self._set_headers(200)
         response = []
-
         parsed = self.parse_url(self.path)
         
         #fetch with 2
         if len(parsed) == 2:
             (resource, id) = parsed
 
-            if resource == 'users':
-                if id is not None:
-                    response = f"{get_single_user(id)}"
-                else:
-                    response = f"{get_all_users()}"
+            # if resource == 'users':
+            #     if id is not None:
+            #         response = f"{get_single_user(id)}"
+            #     else:
+            #         response = f"{get_all_users()}"
             
-            if resource == 'posts':
-                if id is not None:
-                    response = f"{get_single_post(id)}"
-                else:
-                    response = f"{get_all_posts()}"
+            # if resource == 'posts':
+            #     if id is not None:
+            #         response = f"{get_single_post(id)}"
+            #     else:
+            #         response = f"{get_all_posts()}"
             
-            if resource == 'comments':
-                if id is not None:
-                    response = f"{get_single_comment(id)}"
-                else:
-                    response = f"{get_all_comments()}"
+            # if resource == 'comments':
+            #     if id is not None:
+            #         response = f"{get_single_comment(id)}"
+            #     else:
+            #         response = f"{get_all_comments()}"
             
-            if resource == 'tags':
-                if id is not None:
-                    response = f"{get_single_tag(id)}"
-                else:
-                    response = f"{get_all_tags()}"
+            # if resource == 'tags':
+            #     if id is not None:
+            #         response = f"{get_single_tag(id)}"
+            #     else:
+            #         response = f"{get_all_tags()}"
             
-            if resource == 'categories':
-                if id is not None:
-                    response = f"{get_single_category(id)}"
-                else:
-                    response = f"{get_all_categories()}"
+            # if resource == 'categories':
+            #     if id is not None:
+            #         response = f"{get_single_category(id)}"
+            #     else:
+            #         response = f"{get_all_categories()}"
             
-            if resource == 'reactions':
-                if id is not None:
-                    response = f"{get_single_reaction(id)}"
-                else:
-                    response = f"{get_all_reactions()}"
+            # if resource == 'reactions':
+            #     if id is not None:
+            #         response = f"{get_single_reaction(id)}"
+            #     else:
+            #         response = f"{get_all_reactions()}"
             
-            if resource == 'subscriptions':
-                if id is not None:
-                    response = f"{get_single_subscription(id)}"
-                else:
-                    response = f"{get_all_subscriptions()}"
+            # if resource == 'subscriptions':
+            #     if id is not None:
+            #         response = f"{get_single_subscription(id)}"
+            #     else:
+            #         response = f"{get_all_subscriptions()}"
+
+            # for now
+            pass
 
         
         
         #Fetch call with 3
         elif len(parsed) == 3:
             (resource, key, value) = parsed
-            #update
+            #update later
             pass
 
         self.wfile.write(response.encode())
@@ -122,7 +119,22 @@ class HandleRequests(BaseHTTPRequestHandler):
         self._set_headers(204)
         (resource, id) = self.parse_url(self.path)
 
+        # if resource == "users":
+        #     delete_user(id)
+        # if resource == "comments":
+        #     delete_comment(id)
+        # if resource == "posts":
+        #     delete_post(id)
+        # if resource == "subscriptions":
+        #     delete_subscription(id)
+        # if resource == "reactions":
+        #     delete_reaction(id)
+        # if resource == "tags":
+        #     delete_tag(id)
+        # if resource == "categories":
+        #     delete_category(id)
 
+        self.wfile.write("".encode())
     
     def do_PUT(self):
         content_len = int(self.headers.get('content-length', 0))
@@ -133,6 +145,28 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         success = False
 
+        # if resource == "users":
+        #     success = update_user(id, post_body)
+        # if resource == "comments":
+        #     success = update_comment(id, post_body)
+        # if resource == "posts":
+        #     success = update_post(id, post_body)
+        # if resource == "subscriptions":
+        #     success = update_subscription(id, post_body)
+        # if resource == "reactions":
+        #     success = update_reaction(id, post_body)
+        # if resource == "tags":
+        #     success = update_tag(id, post_body)
+        # if resource == "categories":
+        #     success = update_category(id, post_body)
+
+
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+        
+        self.wfile.write("".encode())
         
 
         
@@ -145,27 +179,26 @@ class HandleRequests(BaseHTTPRequestHandler):
         self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
-
         post_body = json.loads(post_body)
 
         (resource, id) = self.parse_url(self.path)
 
         new_item = None
 
-        if resource == "users":
-            new_item = create_user(post_body)
-        elif resource == "post":
-            new_item = create_post(post_body)
-        elif resource == "comments":
-            new_item = create_comment(post_body)
-        elif resource == "tags":
-            new_item = create_tag(post_body)
-        elif resource == "reactions":
-            new_item = create_reaction(post_body)
-        elif resource == "subscriptions":
-            new_item = create_subscription(post_body)
-        elif resource == "categories":
-            new_item = create_category(post_body)
+        # if resource == "users":
+        #     new_item = create_user(post_body)
+        # elif resource == "post":
+        #     new_item = create_post(post_body)
+        # elif resource == "comments":
+        #     new_item = create_comment(post_body)
+        # elif resource == "tags":
+        #     new_item = create_tag(post_body)
+        # elif resource == "reactions":
+        #     new_item = create_reaction(post_body)
+        # elif resource == "subscriptions":
+        #     new_item = create_subscription(post_body)
+        # elif resource == "categories":
+        #     new_item = create_category(post_body)
 
 
 
