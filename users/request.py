@@ -199,6 +199,38 @@ def check_user(body):
     return json.dumps(response)
 
 
+def create_user(new_user):
+    #open connection
+    with sqlite3.connect("./rare.db") as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+            INSERT INTO Users
+                (first_name, last_name, email, username, password)
+            VALUES 
+                (?, ?, ?, ?, ?);
+        """,
+        (new_user["first_name"],
+         new_user["last_name"],
+         new_user["email"],
+         new_user["username"],
+         new_user["password"],
+         ))
+
+
+        id = db_cursor.lastrowid
+
+        new_user["id"] = id
+        new_user["token"] = id
+        new_user["valid"] = True
+
+        
+    return json.dumps(new_user)
+
+
+
 # def get_all_Things():
 #     #open connection
 #     with sqlite3.connect("./rare.db") as conn:
