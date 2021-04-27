@@ -113,7 +113,7 @@ CREATE TABLE "Tags" (
 INSERT INTO Tags
     VALUES (1, "Tag 1");
 INSERT INTO Tags
-    VALUES (1, "Tag 2");
+    VALUES (2, "Tag 2");
 
 
 CREATE TABLE "PostTags" (
@@ -138,3 +138,53 @@ INSERT INTO Categories
     VALUES (1, "Category A");
 INSERT INTO Categories
     VALUES (2, "Category B");
+
+
+SELECT
+    u.id user_id,
+    u.first_name,
+    u.last_name,
+    u.email,
+    u.username,
+    u.password,
+    u.is_staff,
+    u.bio,
+    u.created_on,
+    u.active,
+    p.id post_id,
+    p.user_id,
+    p.category_id,
+    p.title,
+    p.publication_date,
+    p.content,
+    s.id subscription_id,
+    s.follower_id,
+    s.author_id,
+    s.created_on,
+    s.ended_on,
+    c.id comment_id,
+    c.post_id,
+    c.author_id,
+    c.content,
+    c.created_on,
+    pr.id post_reaction_id,
+    pr.user_id,
+    pr.post_id,
+    pr.reaction_id
+
+FROM Users u
+
+JOIN Posts p
+ON p.user_id = u.id
+
+JOIN Subscriptions s
+ON s.author_id = u.id
+
+JOIN Comments c
+ON c.author_id = u.id
+
+JOIN PostReactions pr
+ON pr.user_id = u.id
+
+-- JOIN Subscriptions s
+-- ON s.follower_id = u.id

@@ -1,5 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from users import get_all_users
 
 class HandleRequests(BaseHTTPRequestHandler):
     
@@ -58,11 +59,11 @@ class HandleRequests(BaseHTTPRequestHandler):
         if len(parsed) == 2:
             (resource, id) = parsed
 
-            # if resource == 'users':
-            #     if id is not None:
-            #         response = f"{get_single_user(id)}"
-            #     else:
-            #         response = f"{get_all_users()}"
+            if resource == 'users':
+                if id is not None:
+                    response = f"{get_single_user(id)}"
+                else:
+                    response = f"{get_all_users()}"
             
             # if resource == 'posts':
             #     if id is not None:
