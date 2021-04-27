@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from users import get_all_users
+from users import get_all_users, get_single_user
 
 class HandleRequests(BaseHTTPRequestHandler):
     

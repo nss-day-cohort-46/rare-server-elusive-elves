@@ -91,10 +91,85 @@ def get_all_users():
         return json.dumps(users)
 
 
+def get_single_user(id):
+     #open connection
+    with sqlite3.connect("./rare.db") as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        #SQL query
+        db_cursor.execute("""
+        SELECT
+            u.id,
+            u.first_name,
+            u.last_name,
+            u.email,
+            u.username,
+            u.password,
+            u.is_staff,
+            u.bio,
+            u.created_on,
+            u.active,
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.content,
+            s.id,
+            s.follower_id,
+            s.author_id,
+            s.created_on,
+            s.ended_on,
+            c.id,
+            c.post_id,
+            c.author_id,
+            c.content,
+            c.created_on
+
+
+        FROM Users as u
+
+        JOIN Posts p
+        ON p.user_id = u.id
+
+        JOIN Subscriptions s
+        ON s.author_id = u.id
+
+        JOIN Comments c
+        ON c.author_id = u.id
+
+        WHERE u.id = ?
+        """, (id, ))
+
+        #Load the single return
+        data = db_cursor.fetchone()
+
+        #create a user instance from current row
+        user = Users(data['id'], data['first_name'], data['last_name'], data['email'],
+                    data['username'], data['password'], data['is_staff'], data['bio'], data['created_on'], data['active'])
+
+        #created joined instances
+        post = Posts(data['id'], data['user_id'], data['category_id'], data['title'], data['publication_date'], data['content'])
+        comment = Comments(data['id'], data['id'], data['author_id'], data['content'], data['created_on'])
+        subscription = Subscriptions(data['id'], data['follower_id'], data['author_id'], data['created_on'], data['ended_on'])
+        # postReaction = PostReaction(data['postReaction_id'], data['postReaction_user_id'], data['postReaction_post_id'], data['postReaction_reaction_id'])
+        
+        #add the new dictionaries to user instance
+        user.post = post.__dict__
+        user.comment = comment.__dict__
+        user.subscription = subscription.__dict__
+        # user.postReaction = postReaction.__dict__
+        
+        
+
+        #return the data
+        return json.dumps(user.__dict__)
 
 
 
-# def get_all_users():
+# def get_all_Things():
 #     #open connection
 #     with sqlite3.connect("./rare.db") as conn:
 
