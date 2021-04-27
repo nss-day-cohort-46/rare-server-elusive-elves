@@ -1,6 +1,10 @@
 import json
 import sqlite3
 from models import Users
+from models import Posts
+from models import Comments
+from models import Subscriptions
+# from models import PostReactions
 
 
 def get_all_users():
@@ -22,9 +26,37 @@ def get_all_users():
             u.is_staff,
             u.bio,
             u.created_on,
-            u.active
+            u.active,
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.content,
+            s.id,
+            s.follower_id,
+            s.author_id,
+            s.created_on,
+            s.ended_on,
+            c.id,
+            c.post_id,
+            c.author_id,
+            c.content,
+            c.created_on
+
 
         FROM Users as u
+
+        JOIN Posts p
+        ON p.user_id = u.id
+
+        JOIN Subscriptions s
+        ON s.author_id = u.id
+
+        JOIN Comments c
+        ON c.author_id = u.id
+
+
         """)
 
         #Initialize an empty list for users
@@ -40,7 +72,18 @@ def get_all_users():
             user = Users(row['id'], row['first_name'], row['last_name'], row['email'],
                             row['username'], row['password'], row['is_staff'], row['bio'], row['created_on'], row['active'])
 
-
+            #created joined instances
+            post = Posts(row['id'], row['user_id'], row['category_id'], row['title'], row['publication_date'], row['content'])
+            comment = Comments(row['id'], row['id'], row['author_id'], row['content'], row['created_on'])
+            subscription = Subscriptions(row['id'], row['follower_id'], row['author_id'], row['created_on'], row['ended_on'])
+            # postReaction = PostReaction(row['postReaction_id'], row['postReaction_user_id'], row['postReaction_post_id'], row['postReaction_reaction_id'])
+           
+            #add the new dictionaries to user instance
+            user.post = post.__dict__
+            user.comment = comment.__dict__
+            user.subscription = subscription.__dict__
+            # user.postReaction = postReaction.__dict__
+           
             #add user to users
             users.append(user.__dict__)
 
