@@ -167,6 +167,36 @@ def get_single_user(id):
         #return the data
         return json.dumps(user.__dict__)
 
+def check_user(body):
+     #open connection
+    with sqlite3.connect("./rare.db") as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        #SQL query
+        db_cursor.execute("""
+        SELECT 
+            u.id
+        FROM users as u
+        WHERE u.email = ? AND u.password = ?
+        """, (body["username"], body["password"]))
+
+        #Load the single return
+        data = db_cursor.fetchone()
+
+        response = {}
+
+    if data:
+        response["valid"] = True
+        response["token"] = data["id"]
+
+    
+    # else:
+    #     response["valid"] = False
+        
+        
+    return json.dumps(response)
 
 
 # def get_all_Things():

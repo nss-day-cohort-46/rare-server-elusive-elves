@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from users import get_all_users, get_single_user
+from users import get_all_users, get_single_user, check_user
 
 class HandleRequests(BaseHTTPRequestHandler):
     
@@ -59,7 +59,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         if len(parsed) == 2:
             (resource, id) = parsed
 
-            if resource == 'users':
+            if resource == 'login':
                 if id is not None:
                     response = f"{get_single_user(id)}"
                 else:
@@ -180,14 +180,15 @@ class HandleRequests(BaseHTTPRequestHandler):
         self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
+        
         post_body = json.loads(post_body)
 
         (resource, id) = self.parse_url(self.path)
 
         new_item = None
 
-        # if resource == "users":
-        #     new_item = create_user(post_body)
+        if resource == "login":
+            new_item = check_user(post_body)
         # elif resource == "post":
         #     new_item = create_post(post_body)
         # elif resource == "comments":
