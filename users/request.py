@@ -223,6 +223,9 @@ def create_user(new_user):
         id = db_cursor.lastrowid
 
         new_user["id"] = id
+        new_user["token"] = id
+        new_user["valid"] = True
+
         
     return json.dumps(new_user)
 
