@@ -2,6 +2,8 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, get_single_user, check_user, create_user
 from posts import get_all_posts, get_single_post
+from comments import get_all_comments, get_single_comment
+
 
 class HandleRequests(BaseHTTPRequestHandler):
     
@@ -72,11 +74,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_posts()}"
             
-            # if resource == 'comments':
-            #     if id is not None:
-            #         response = f"{get_single_comment(id)}"
-            #     else:
-            #         response = f"{get_all_comments()}"
+            if resource == 'comments':
+                if id is not None:
+                    response = f"{get_single_comment(id)}"
+                else:
+                    response = f"{get_all_comments()}"
             
             # if resource == 'tags':
             #     if id is not None:
