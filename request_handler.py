@@ -1,7 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, get_single_user, check_user, create_user
-from posts import get_all_posts, get_single_post, get_posts_by_user_id
+from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post
 
 class HandleRequests(BaseHTTPRequestHandler):
     
@@ -193,6 +193,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = check_user(post_body)
         elif resource == "register":
             new_item = create_user(post_body)
+        elif resource == "posts":
+            new_item = create_post(post_body)
         # elif resource == "comments":
         #     new_item = create_comment(post_body)
         # elif resource == "tags":
