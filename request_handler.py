@@ -12,8 +12,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         resource = path_params[1]
 
         if "?" in resource:
-            resource = resource.split("?")[0]
             param = resource.split("?")[1]
+            resource = resource.split("?")[0]
 
             pair = param.split("=")
 
