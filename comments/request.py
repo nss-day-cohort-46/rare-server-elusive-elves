@@ -71,23 +71,29 @@ def get_single_comment(id):
 
         return json.dumps(comment.__dict__)
 
-def create_comment(comment):
-    # Get the id value of the last comment in the list
-    max_id = COMMENTS[-1]["id"]
+def create_comment(new_comment):
+    with sqlite3.connect("./rare.db") as conn:
+        
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        INSERT INTO comments
+            (post_id, author_id, content, created_on)
+        VALUES
+            (?, ?, ?, ?);
+        """, (new_comment["post_id"], new_comment["author_id"], 
+          new_comment["content"], new_comment["created_on"], ))
+        
+        id = db_cursor.lastrowid
 
-    # Add 1 to whatever that number is
-    new_id = max_id + 1
+        new_comment["id"] = id
 
-    # Add an `id` property to the comment dictionary
-    comment["id"] = new_id
-
-    # Add the comment dictionary to the list
-    COMMENTS.append(comment)
-
-    # Return the dictionary with `id` property added
-    return comment
-
+    return json.dumps(new_comment)
   
+
+
+
+
 def delete_comment(id):
    with sqlite3.connect("./rare.db") as conn:
         conn.row_factory = sqlite3.Row
@@ -100,10 +106,27 @@ def delete_comment(id):
 
 
 def update_comment(id, new_comment):
-    # Iterate the COMMENTS list, but use enumerate() so that
-    # you can access the index value of each item.
-    for index, comment in enumerate(COMMENTS):
-        if comment["id"] == id:
-            # Found the comment. Update the value.
-            COMMENTS[index] = new_comment
-            break
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE Comments
+            SET
+                post_id = ?,
+                author_id = ?,
+                content = ?,
+                created_on = ?
+        WHERE id = ?
+        """, (new_comment["post_id"], new_comment["author_id"], 
+          new_comment["content"], new_comment["created_on"], id, ))
+
+        # Were any rows affected?
+        # Did the client send an `id` that exists?
+        rows_affected = db_cursor.rowcount
+
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True

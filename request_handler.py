@@ -151,8 +151,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # if resource == "users":
         #     success = update_user(id, post_body)
-        # if resource == "comments":
-        #     success = update_comment(id, post_body)
+        if resource == "comments":
+            success = update_comment(id, post_body)
         # if resource == "posts":
         #     success = update_post(id, post_body)
         # if resource == "subscriptions":
@@ -194,8 +194,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = check_user(post_body)
         elif resource == "register":
             new_item = create_user(post_body)
-        # elif resource == "comments":
-        #     new_item = create_comment(post_body)
+        elif resource == "comments":
+            new_item = create_comment(post_body)
         # elif resource == "tags":
         #     new_item = create_tag(post_body)
         # elif resource == "reactions":
