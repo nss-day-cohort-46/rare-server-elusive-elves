@@ -81,6 +81,12 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_comment(id)}"
                 else:
                     response = f"{get_all_comments()}"
+
+            if resource == 'users':
+                if id is not None:
+                    response = f"{get_single_user(id)}"
+                else:
+                    response = f"{get_all_users()}"
             
             # if resource == 'tags':
             #     if id is not None:
@@ -106,8 +112,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             #     else:
             #         response = f"{get_all_subscriptions()}"
 
-            # for now
-            pass
+            
 
         
         
@@ -206,7 +211,7 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         elif resource == "posts":
             new_item = create_post(post_body)
-       
+        
         elif resource == "comments":
             new_item = create_comment(post_body)
 
