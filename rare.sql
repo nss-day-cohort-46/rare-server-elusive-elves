@@ -64,6 +64,13 @@ INSERT INTO Posts
 INSERT INTO Posts
     VALUES (2, 1, 1, "This is a another title", 4/21/2021, "This is more content");
 
+UPDATE Posts
+SET publication_date = "2021-21-4"
+WHERE id = 1;
+UPDATE Posts
+SET publication_date = "2021-21-4"
+WHERE id = 3;
+
 CREATE TABLE "Comments" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "post_id" INTEGER,
