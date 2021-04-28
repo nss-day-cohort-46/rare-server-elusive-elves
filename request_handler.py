@@ -2,7 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from users import get_all_users, get_single_user, check_user, create_user
-from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post, get_post_by_category
+from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post, get_post_by_category, get_posts_by_tags
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
 
 
@@ -120,6 +120,9 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             if resource == "posts" and key == "categories":
                 response = f"{get_post_by_category(value)}"
+
+            if resource == "posts" and key == "tags":
+                response = f"{get_posts_by_tags(value)}"
 
         self.wfile.write(response.encode())
 
