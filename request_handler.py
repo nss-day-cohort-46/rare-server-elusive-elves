@@ -5,6 +5,7 @@ from users import get_all_users, get_single_user, check_user, create_user
 from categories import get_all_categories, get_single_category, create_category, delete_category, update_category
 from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
+from tags import get_all_tags, get_single_tag, create_tag, delete_tag, update_tag
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -70,11 +71,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_comments()}"
             
-            # if resource == 'tags':
-            #     if id is not None:
-            #         response = f"{get_single_tag(id)}"
-            #     else:
-            #         response = f"{get_all_tags()}"
+            if resource == 'tags':
+                if id is not None:
+                    response = f"{get_single_tag(id)}"
+                else:
+                    response = f"{get_all_tags()}"
             
             if resource == 'categories':
                 if id is not None:
@@ -123,8 +124,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     delete_subscription(id)
         # if resource == "reactions":
         #     delete_reaction(id)
-        # if resource == "tags":
-        #     delete_tag(id)
+        if resource == "tags":
+            delete_tag(id)
         if resource == "categories":
             delete_category(id)
 
@@ -152,8 +153,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     success = update_subscription(id, post_body)
         # if resource == "reactions":
         #     success = update_reaction(id, post_body)
-        # if resource == "tags":
-        #     success = update_tag(id, post_body)
+        if resource == "tags":
+            success = update_tag(id, post_body)
         if resource == "categories":
             success = update_category(id, post_body)
 
@@ -186,8 +187,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == "comments":
             new_item = create_comment(post_body)
 
-        # elif resource == "tags":
-        #     new_item = create_tag(post_body)
+        elif resource == "tags":
+            new_item = create_tag(post_body)
         # elif resource == "reactions":
         #     new_item = create_reaction(post_body)
         # elif resource == "subscriptions":
@@ -205,4 +206,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
