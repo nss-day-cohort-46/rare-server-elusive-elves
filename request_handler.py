@@ -2,7 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, get_single_user, check_user, create_user
 from posts import get_all_posts, get_single_post
-from categories import get_all_categories, get_single_category
+from categories import get_all_categories, get_single_category, create_category, delete_category, update_category
 
 class HandleRequests(BaseHTTPRequestHandler):
     
@@ -134,8 +134,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     delete_reaction(id)
         # if resource == "tags":
         #     delete_tag(id)
-        # if resource == "categories":
-        #     delete_category(id)
+        if resource == "categories":
+            delete_category(id)
 
         self.wfile.write("".encode())
     
@@ -201,8 +201,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     new_item = create_reaction(post_body)
         # elif resource == "subscriptions":
         #     new_item = create_subscription(post_body)
-        # elif resource == "categories":
-        #     new_item = create_category(post_body)
+        elif resource == "categories":
+            new_item = create_category(post_body)
 
 
 
