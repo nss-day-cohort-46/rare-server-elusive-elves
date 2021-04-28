@@ -66,10 +66,11 @@ def update_category(id, updated_category):
 
         db_cursor.execute("""
         UPDATE Categories
-            SET
+            SET 
                 label = ?
         WHERE id = ?
-        """,(updated_category['label'],id,))
+        """,(updated_category['label'], id, ))
+        
         rows_affected = db_cursor.rowcount
         if rows_affected == 0:
             return False

@@ -1,7 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, get_single_user, check_user, create_user
-from posts import get_all_posts, get_single_post
+from posts import get_all_posts, get_single_post, get_posts_by_user_id
 from categories import get_all_categories, get_single_category, create_category, delete_category, update_category
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -12,6 +12,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         resource = path_params[1]
 
         if "?" in resource:
+            
             param = resource.split("?")[1]
             resource = resource.split("?")[0]
 
@@ -111,8 +112,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #Fetch call with 3
         elif len(parsed) == 3:
             (resource, key, value) = parsed
-            #update later
-            pass
+            if resource == "posts" and key == "user":
+                    response = f"{get_posts_by_user_id(value)}"
 
         self.wfile.write(response.encode())
 
@@ -160,8 +161,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     success = update_reaction(id, post_body)
         # if resource == "tags":
         #     success = update_tag(id, post_body)
-        # if resource == "categories":
-        #     success = update_category(id, post_body)
+        if resource == "categories":
+            success = update_category(id, post_body)
 
 
         if success:
