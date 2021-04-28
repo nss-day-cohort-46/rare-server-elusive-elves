@@ -2,7 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from users import get_all_users, get_single_user, check_user, create_user
-from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post
+from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post, get_post_by_category
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
 
 
@@ -57,7 +57,7 @@ class HandleRequests(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self._set_headers(200)
-        response = []
+        response = {}
         parsed = self.parse_url(self.path)
         
         #fetch with 2
@@ -114,8 +114,12 @@ class HandleRequests(BaseHTTPRequestHandler):
         #Fetch call with 3
         elif len(parsed) == 3:
             (resource, key, value) = parsed
+            value = int(value)
             if resource == "posts" and key == "user":
-                    response = f"{get_posts_by_user_id(value)}"
+                response = f"{get_posts_by_user_id(value)}"
+
+            if resource == "posts" and key == "categories":
+                response = f"{get_post_by_category(value)}"
 
         self.wfile.write(response.encode())
 
