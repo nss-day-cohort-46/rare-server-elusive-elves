@@ -1,8 +1,9 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+
 from users import get_all_users, get_single_user, check_user, create_user
-from posts import get_all_posts, get_single_post
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
+from posts import get_all_posts, get_single_post, get_posts_by_user_id
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -13,8 +14,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         resource = path_params[1]
 
         if "?" in resource:
-            resource = resource.split("?")[0]
+            
             param = resource.split("?")[1]
+            resource = resource.split("?")[0]
 
             pair = param.split("=")
 
@@ -112,8 +114,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #Fetch call with 3
         elif len(parsed) == 3:
             (resource, key, value) = parsed
-            #update later
-            pass
+            if resource == "posts" and key == "user":
+                    response = f"{get_posts_by_user_id(value)}"
 
         self.wfile.write(response.encode())
 
