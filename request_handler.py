@@ -1,7 +1,7 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, get_single_user, check_user, create_user
-from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post
+from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post
 
 class HandleRequests(BaseHTTPRequestHandler):
     
@@ -152,8 +152,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     success = update_user(id, post_body)
         # if resource == "comments":
         #     success = update_comment(id, post_body)
-        # if resource == "posts":
-        #     success = update_post(id, post_body)
+        if resource == "posts":
+            success = update_post(id, post_body)
         # if resource == "subscriptions":
         #     success = update_subscription(id, post_body)
         # if resource == "reactions":
