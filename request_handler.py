@@ -2,8 +2,8 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from users import get_all_users, get_single_user, check_user, create_user
+from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
-from posts import get_all_posts, get_single_post, get_posts_by_user_id
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -127,10 +127,14 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # if resource == "users":
         #     delete_user(id)
+
+
+        if resource == "posts":
+            delete_post(id)
+
         if resource == "comments":
             delete_comment(id)
-        # if resource == "posts":
-        #     delete_post(id)
+
         # if resource == "subscriptions":
         #     delete_subscription(id)
         # if resource == "reactions":
@@ -153,10 +157,13 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # if resource == "users":
         #     success = update_user(id, post_body)
+
+        if resource == "posts":
+            success = update_post(id, post_body)
+
         if resource == "comments":
             success = update_comment(id, post_body)
-        # if resource == "posts":
-        #     success = update_post(id, post_body)
+
         # if resource == "subscriptions":
         #     success = update_subscription(id, post_body)
         # if resource == "reactions":
@@ -196,8 +203,13 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = check_user(post_body)
         elif resource == "register":
             new_item = create_user(post_body)
+
+        elif resource == "posts":
+            new_item = create_post(post_body)
+       
         elif resource == "comments":
             new_item = create_comment(post_body)
+
         # elif resource == "tags":
         #     new_item = create_tag(post_body)
         # elif resource == "reactions":
