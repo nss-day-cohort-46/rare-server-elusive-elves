@@ -77,13 +77,13 @@ def get_all_users():
             comment = Comments(row['id'], row['id'], row['author_id'], row['content'], row['created_on'])
             subscription = Subscriptions(row['id'], row['follower_id'], row['author_id'], row['created_on'], row['ended_on'])
             # postReaction = PostReaction(row['postReaction_id'], row['postReaction_user_id'], row['postReaction_post_id'], row['postReaction_reaction_id'])
-           
+            
             #add the new dictionaries to user instance
             user.post = post.__dict__
             user.comment = comment.__dict__
             user.subscription = subscription.__dict__
             # user.postReaction = postReaction.__dict__
-           
+            
             #add user to users
             users.append(user.__dict__)
 
@@ -92,7 +92,7 @@ def get_all_users():
 
 
 def get_single_user(id):
-     #open connection
+    #open connection
     with sqlite3.connect("./rare.db") as conn:
 
         conn.row_factory = sqlite3.Row
@@ -168,7 +168,7 @@ def get_single_user(id):
         return json.dumps(user.__dict__)
 
 def check_user(body):
-     #open connection
+    #open connection
     with sqlite3.connect("./rare.db") as conn:
 
         conn.row_factory = sqlite3.Row
