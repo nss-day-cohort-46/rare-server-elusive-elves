@@ -2,27 +2,21 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from users import get_all_users, get_single_user, check_user, create_user
+from categories import get_all_categories, get_single_category, create_category, delete_category, update_category
 from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_post, delete_post, update_post
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
 
-
 class HandleRequests(BaseHTTPRequestHandler):
-    
     def parse_url(self, path):
-
         path_params = path.split("/") # localhost:8088/entries/1
         resource = path_params[1]
 
-        if "?" in resource:
-            
+        if "?" in resource:    
             param = resource.split("?")[1]
             resource = resource.split("?")[0]
-
             pair = param.split("=")
-
             key = pair[0]
             value = pair[1]
-
             return (resource, key, value)
 
         else:
@@ -36,24 +30,18 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             return (resource, id)
 
-    
-    
     def _set_headers(self, status):
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-    
-    
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
-
-    
 
     def do_GET(self):
         self._set_headers(200)
@@ -88,11 +76,11 @@ class HandleRequests(BaseHTTPRequestHandler):
             #     else:
             #         response = f"{get_all_tags()}"
             
-            # if resource == 'categories':
-            #     if id is not None:
-            #         response = f"{get_single_category(id)}"
-            #     else:
-            #         response = f"{get_all_categories()}"
+            if resource == 'categories':
+                if id is not None:
+                    response = f"{get_single_category(id)}"
+                else:
+                    response = f"{get_all_categories()}"
             
             # if resource == 'reactions':
             #     if id is not None:
@@ -109,8 +97,6 @@ class HandleRequests(BaseHTTPRequestHandler):
             # for now
             pass
 
-        
-        
         #Fetch call with 3
         elif len(parsed) == 3:
             (resource, key, value) = parsed
@@ -118,8 +104,6 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_posts_by_user_id(value)}"
 
         self.wfile.write(response.encode())
-
-
 
     def do_DELETE(self):
         self._set_headers(204)
@@ -141,8 +125,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     delete_reaction(id)
         # if resource == "tags":
         #     delete_tag(id)
-        # if resource == "categories":
-        #     delete_category(id)
+        if resource == "categories":
+            delete_category(id)
 
         self.wfile.write("".encode())
     
@@ -170,9 +154,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     success = update_reaction(id, post_body)
         # if resource == "tags":
         #     success = update_tag(id, post_body)
-        # if resource == "categories":
-        #     success = update_category(id, post_body)
-
+        if resource == "categories":
+            success = update_category(id, post_body)
 
         if success:
             self._set_headers(204)
@@ -181,14 +164,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         
         self.wfile.write("".encode())
         
-
-        
-        
-
-
-
     def do_POST(self):
-
         self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
@@ -216,14 +192,10 @@ class HandleRequests(BaseHTTPRequestHandler):
         #     new_item = create_reaction(post_body)
         # elif resource == "subscriptions":
         #     new_item = create_subscription(post_body)
-        # elif resource == "categories":
-        #     new_item = create_category(post_body)
-
-
-
+        elif resource == "categories":
+            new_item = create_category(post_body)
 
         self.wfile.write(f"{new_item}".encode())
-
 
 def main():
 
