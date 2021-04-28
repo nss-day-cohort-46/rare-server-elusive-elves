@@ -2,7 +2,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from users import get_all_users, get_single_user, check_user, create_user
 from posts import get_all_posts, get_single_post
-from comments import get_all_comments, get_single_comment
+from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -125,8 +125,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # if resource == "users":
         #     delete_user(id)
-        # if resource == "comments":
-        #     delete_comment(id)
+        if resource == "comments":
+            delete_comment(id)
         # if resource == "posts":
         #     delete_post(id)
         # if resource == "subscriptions":

@@ -89,19 +89,14 @@ def create_comment(comment):
 
   
 def delete_comment(id):
-    # Initial -1 value for comment index, in case one isn't found
-    comment_index = -1
-
-    # Iterate the COMMENTS list, but use enumerate() so that you
-    # can access the index value of each item
-    for index, comment in enumerate(COMMENTS):
-        if comment["id"] == id:
-            # Found the comment. Store the current index.
-            comment_index = index
-
-    # If the comment was found, use pop(int) to remove it from list
-    if comment_index >= 0:
-        COMMENTS.pop(comment_index)
+   with sqlite3.connect("./rare.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM Comments
+        WHERE id = ?
+        """, (id, ))
+        
 
 
 def update_comment(id, new_comment):
