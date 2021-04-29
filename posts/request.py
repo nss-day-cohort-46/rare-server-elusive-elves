@@ -233,10 +233,15 @@ def get_posts_by_tags(id):
             p.category_id,
             p.title,
             p.publication_date,
-            p.content
+            p.content,
+            pt.id as pt_id,
+            pt.tag_id,
+            pt.post_id
         FROM posts p
-        WHERE p.category_id = ?
-        """, ( id, ))
+        JOIN posttags pt on pt.post_id = p.id
+        JOIN tags t on t.id = pt.tag_id
+        WHERE pt.tag_id = ?
+        """, (id, ))
 
         
         posts = []

@@ -131,10 +131,15 @@ CREATE TABLE "PostTags" (
   FOREIGN KEY(`tag_id`) REFERENCES `Tags`(`id`)
 );
 
+
 INSERT INTO PostTags
-    VALUES (1, 1, 1);
+    VALUES (3, 2, 2);
 INSERT INTO PostTags
-    VALUES (2, 2, 1);
+    VALUES (4, 2, 7);
+    INSERT INTO PostTags
+    VALUES (5, 1, 12);
+INSERT INTO PostTags
+    VALUES (6, 2, 14);    
 
 CREATE TABLE "Categories" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -198,3 +203,38 @@ ON pr.user_id = u.id
 
 
 
+SELECT
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.content,
+            pt.id as pt_id,
+            pt.tag_id,
+            pt.post_id
+        FROM posts p
+        JOIN posttags pt on pt.post_id = p.id
+        WHERE p.category_id = ?
+
+SELECT 
+        pt.id,
+        pt.tag_id,
+        pt.post_id
+    FROM posttags pt        
+
+SELECT
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.content,
+            pt.id as pt_id,
+            pt.tag_id,
+            pt.post_id
+        FROM posts p
+        JOIN posttags pt on pt.post_id = p.id
+        JOIN tags t on t.id = pt.tag_id
+        WHERE pt.tag_id = 1
+    
