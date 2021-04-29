@@ -79,7 +79,7 @@ def get_posts_by_user_id(id):
             p.publication_date,
             p.content
         FROM posts p
-        WHERE p.id = ?
+        WHERE p.user_id = ?
         """, ( id, ))
 
         
