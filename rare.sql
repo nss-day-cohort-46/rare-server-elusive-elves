@@ -238,3 +238,11 @@ SELECT
 
         FROM Users as u
     
+SELECT
+  s.id,
+  s.follower_id,
+  s.author_id,
+  s.created_on,
+  s.ended_on
+  
+FROM Subscriptions as s

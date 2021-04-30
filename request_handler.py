@@ -9,6 +9,7 @@ from categories import get_all_categories, get_single_category, create_category,
 
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
 from tags import get_all_tags, get_single_tag, create_tag, delete_tag, update_tag
+from subscriptions import get_all_subscriptions, get_single_subscription, create_subscription, delete_subscription
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -98,11 +99,11 @@ class HandleRequests(BaseHTTPRequestHandler):
             #     else:
             #         response = f"{get_all_reactions()}"
             
-            # if resource == 'subscriptions':
-            #     if id is not None:
-            #         response = f"{get_single_subscription(id)}"
-            #     else:
-            #         response = f"{get_all_subscriptions()}"
+            if resource == 'subscriptions':
+                if id is not None:
+                    response = f"{get_single_subscription(id)}"
+                else:
+                    response = f"{get_all_subscriptions()}"
 
             
 
@@ -164,8 +165,8 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "comments":
             success = update_comment(id, post_body)
 
-        # if resource == "subscriptions":
-        #     success = update_subscription(id, post_body)
+        if resource == "subscriptions":
+            success = update_subscription(id, post_body)
         # if resource == "reactions":
         #     success = update_reaction(id, post_body)
         if resource == "tags":
@@ -206,8 +207,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_item = create_tag(post_body)
         # elif resource == "reactions":
         #     new_item = create_reaction(post_body)
-        # elif resource == "subscriptions":
-        #     new_item = create_subscription(post_body)
+        elif resource == "subscriptions":
+            new_item = create_subscription(post_body)
         elif resource == "categories":
             new_item = create_category(post_body)
 
