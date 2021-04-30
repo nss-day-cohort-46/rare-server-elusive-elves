@@ -224,17 +224,17 @@ SELECT
     FROM posttags pt        
 
 SELECT
-            p.id,
-            p.user_id,
-            p.category_id,
-            p.title,
-            p.publication_date,
-            p.content,
-            pt.id as pt_id,
-            pt.tag_id,
-            pt.post_id
-        FROM posts p
-        JOIN posttags pt on pt.post_id = p.id
-        JOIN tags t on t.id = pt.tag_id
-        WHERE pt.tag_id = 1
+            u.id,
+            u.first_name,
+            u.last_name,
+            u.email,
+            u.username,
+            u.password,
+            u.is_staff,
+            u.bio,
+            u.created_on,
+            u.active
+
+
+        FROM Users as u
     
