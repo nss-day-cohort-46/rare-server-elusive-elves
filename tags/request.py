@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from models import Tags
+from models import Tags, Post_Tags, post_tags
 
 def get_all_tags():
     with sqlite3.connect("./rare.db") as conn:
@@ -76,3 +76,21 @@ def update_tag(id, updated_tag):
             return False
         else:
             return True
+
+def get_post_tags():
+    with sqlite3.connect("./rare.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        SELECT
+            pt.id,
+            pt.post_id,
+            pt.tag_id
+        FROM posttags pt
+        """)
+        post_tags = []
+        dataset = db_cursor.fetchall()
+        for row in dataset :
+            pt = Post_Tags(row['id'], row['post_id'], row['tag_id'])
+            post_tags.append(pt.__dict__)
+    return json.dumps(post_tags)

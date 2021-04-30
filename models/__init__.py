@@ -5,3 +5,4 @@ from .reactions import Reactions
 from .subscriptions import Subscriptions
 from .tags import Tags
 from .users import Users
+from .post_tags import Post_Tags

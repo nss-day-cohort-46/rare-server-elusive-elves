@@ -8,7 +8,7 @@ from posts import get_all_posts, get_single_post, get_posts_by_user_id, create_p
 from categories import get_all_categories, get_single_category, create_category, delete_category, update_category
 
 from comments import get_all_comments, get_single_comment, create_comment, delete_comment, update_comment
-from tags import get_all_tags, get_single_tag, create_tag, delete_tag, update_tag
+from tags import get_all_tags, get_single_tag, create_tag, delete_tag, update_tag, get_post_tags
 from subscriptions import get_all_subscriptions, get_single_subscription, create_subscription, delete_subscription
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -104,6 +104,12 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_subscription(id)}"
                 else:
                     response = f"{get_all_subscriptions()}"
+            
+            if resource == 'post_tags':
+                if id is not None:
+                    pass
+                else:
+                    response = f"{get_post_tags()}"
 
             
 
